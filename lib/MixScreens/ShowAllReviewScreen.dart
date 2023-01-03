@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'package:connectivity/connectivity.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/components/avatar/gf_avatar.dart';
 import 'package:getwidget/components/list_tile/gf_list_tile.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:rating_dialog/rating_dialog.dart';
@@ -29,7 +31,6 @@ class _ShowAllReviewScreenState extends State<ShowAllReviewScreen> {
   bool _isLoading = false;
 
   bool _isInternetConnected = true;
-
   bool _emtyFlag = false;
   BookReviewModel? _bookReviewModel;
   var token;
@@ -38,9 +39,9 @@ class _ShowAllReviewScreenState extends State<ShowAllReviewScreen> {
   void initState() {
     super.initState();
     _checkInternetConnection();
-    print("tokenn: ${context.read<UserProvider>().UserToken.toString()}");
     token = context.read<UserProvider>().UserToken.toString();
   }
+
 
   Future _checkInternetConnection() async {
     if (this.mounted) {
@@ -77,7 +78,7 @@ class _ShowAllReviewScreenState extends State<ShowAllReviewScreen> {
               Navigator.pop(context);
             },
             icon: const Icon(
-              Icons.arrow_back,
+              Icons.arrow_back_ios,
               size: 35,
               color: Colors.white,
             ),
@@ -186,21 +187,41 @@ class _ShowAllReviewScreenState extends State<ShowAllReviewScreen> {
             : _isLoading
                 ? const Align(
                     alignment: Alignment.center,
-                    child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        Color(0xFF256D85),
+                    child: const Center(
+                      child: CupertinoActivityIndicator(
+                        color: const Color(0xFF256D85),
+                        radius: 20,
                       ),
-                    ),
+                    )
                   )
                 : _emtyFlag
-                    ? Center(
-                        child: Text(
-                          Languages.of(context)!.noReview,
-                          style: const TextStyle(
-                              fontFamily: Constants.fontfamily,
-                              color: Colors.black54),
-                        ),
-                      )
+                    ? Column(
+                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(),
+                        SizedBox(),
+                        Center(
+                            child: Text(
+                              Languages.of(context)!.noReview,
+                              style: const TextStyle(
+                                  fontFamily: Constants.fontfamily,
+                                  color: Colors.black54),
+                            ),
+                          ),
+                        SizedBox(),
+                        // _bannerAd != null
+                        //     ? Align(
+                        //   alignment: Alignment.topCenter,
+                        //   child: Container(
+                        //     width: _bannerAd!.size.width.toDouble(),
+                        //     height: _bannerAd!.size.height.toDouble(),
+                        //     child: AdWidget(ad: _bannerAd!),
+                        //   ),
+                        // )
+                        //     : Container(),
+                      ],
+                    )
                     : ListView.builder(
                         itemCount: _bookReviewModel!.data!.length,
                         shrinkWrap: true,

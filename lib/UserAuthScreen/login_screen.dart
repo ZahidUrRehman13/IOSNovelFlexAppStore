@@ -1,10 +1,13 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
+import 'package:novelflex/UserAuthScreen/SignUpScreens/signUpScreen_First.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -17,7 +20,7 @@ import '../Widgets/reusable_button.dart';
 import '../Widgets/reusable_button_small.dart';
 import '../localization/Language/languages.dart';
 import 'ForgetPasswordScreen.dart';
-import 'SignUpScreen.dart';
+import 'SignUpScreens/SignUpScreen_Second.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -65,13 +68,9 @@ class _LoginScreenState extends State<LoginScreen> {
   void handleLoginUser() {
     SystemChannels.textInput.invokeMethod('TextInput.hide');
     if (_formKey.currentState!.validate()) {
-//    If all data are correct then save data to out variables
       _formKey.currentState!.save();
-      //Call api
-      // _checkInternetConnection();
       _checkInternetConnection();
     } else {
-//    If all data are not valid then start auto validation.
       setState(() {
         _autoValidate = true;
       });
@@ -79,12 +78,6 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future _checkInternetConnection() async {
-    if (this.mounted) {
-      setState(() {
-        _isLoading = true;
-      });
-    }
-
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (!(connectivityResult == ConnectivityResult.mobile ||
         connectivityResult == ConnectivityResult.wifi)) {
@@ -96,11 +89,6 @@ class _LoginScreenState extends State<LoginScreen> {
         fontSize: 14,
       );
       _errorMsg = "No internet connection.";
-      if (this.mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
     } else {
       _callLoginAPI();
     }
@@ -120,266 +108,293 @@ class _LoginScreenState extends State<LoginScreen> {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: Colors.white,
-      // appBar: AppBar(
-      //   toolbarHeight: height*0.1,
-      //   title: Text(Languages.of(context)!.login,style: TextStyle(color: const Color(0xFF256D85),fontWeight: FontWeight.w600,fontSize: width*0.05),),
-      //   centerTitle: true,
-      //   backgroundColor: Colors.white,
-      //   elevation: 0.0,
-      // ),
+      backgroundColor: const Color(0xffebf5f9),
       body: SafeArea(
-        child: GestureDetector(
-          onTap: () {
-            FocusScopeNode currentFocus = FocusScope.of(context);
-            if (!currentFocus.hasPrimaryFocus &&
-                currentFocus.focusedChild != null) {
-              currentFocus.focusedChild!.unfocus();
-            }
-          },
-          child: SingleChildScrollView(
-            child: Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  colorFilter: ColorFilter.mode(
-                      Colors.black.withOpacity(0.8), BlendMode.dstATop),
-                  opacity: 100.0,
-                  image: AssetImage("assets/manga_books.jpg"),
-                ),
-              ),
-              child: Form(
-                key: _formKey,
-                // autovalidate: _autoValidate,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
                   children: [
-                    Column(
-                      children: [
-                        // mainText(width),
-                        // mainSmallText(height),
-                        SizedBox(
-                          height: height * 0.1,
-                        ),
-
-                        mainText2(width),
-                        SizedBox(
-                          height: height * 0.1,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: height * 0.02,
-                              horizontal: width * 0.04),
-                          child: TextFormField(
-                            key: _emailKey,
-                            controller: _controllerEmail,
-                            focusNode: _emailFocusNode,
-                            keyboardType: TextInputType.emailAddress,
-                            textInputAction: TextInputAction.next,
-                            cursorColor: Colors.black,
-                            validator: validateEmail,
-                            onFieldSubmitted: (_) {
-                              FocusScope.of(context)
-                                  .requestFocus(_passwordFocusNode);
-                            },
-                            decoration: InputDecoration(
-                                errorMaxLines: 3,
-                                counterText: "",
-                                filled: true,
-                                fillColor: Colors.white,
-                                focusedBorder: const OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10)),
-                                  borderSide: BorderSide(
-                                    width: 1,
-                                    color: Colors.white12,
-                                  ),
-                                ),
-                                disabledBorder: const OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10)),
-                                  borderSide: BorderSide(
-                                    width: 1,
-                                    color: Color(0xFF256D85),
-                                  ),
-                                ),
-                                enabledBorder: const OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10)),
-                                  borderSide: BorderSide(
-                                    width: 1,
-                                    color: Color(0xFF256D85),
-                                  ),
-                                ),
-                                border: const OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10)),
-                                  borderSide: BorderSide(
-                                    width: 1,
-                                  ),
-                                ),
-                                errorBorder: const OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
-                                    borderSide: BorderSide(
-                                      width: 1,
-                                      color: Colors.red,
-                                    )),
-                                focusedErrorBorder: const OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10)),
-                                  borderSide: BorderSide(
-                                    width: 1,
-                                    color: Colors.red,
-                                  ),
-                                ),
-                                hintText: Languages.of(context)!.email,
-                                // labelText: Languages.of(context)!.email,
-                                hintStyle: const TextStyle(
-                                  fontFamily: Constants.fontfamily,
-                                )),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: height * 0.02,
-                              horizontal: width * 0.04),
-                          child: TextFormField(
-                            key: _passwordKey,
-                            controller: _controllerPassword,
-                            focusNode: _passwordFocusNode,
-                            keyboardType: TextInputType.emailAddress,
-                            textInputAction: TextInputAction.next,
-                            cursorColor: Colors.black,
-                            validator: validatePassword,
-                            obscureText: true,
-                            onFieldSubmitted: (_) {
-                              FocusScope.of(context)
-                                  .requestFocus(_emailFocusNode);
-                            },
-                            decoration: InputDecoration(
-                                errorMaxLines: 3,
-                                counterText: "",
-                                filled: true,
-                                fillColor: Colors.white,
-                                focusedBorder: const OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10)),
-                                  borderSide: BorderSide(
-                                    width: 1,
-                                    color: Colors.black12,
-                                  ),
-                                ),
-                                disabledBorder: const OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10)),
-                                  borderSide: BorderSide(
-                                    width: 1,
-                                    color: Colors.black12,
-                                  ),
-                                ),
-                                enabledBorder: const OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10)),
-                                  borderSide: BorderSide(
-                                    width: 1,
-                                    color: Color(0xFF256D85),
-                                  ),
-                                ),
-                                border: const OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10)),
-                                  borderSide: BorderSide(
-                                    width: 1,
-                                  ),
-                                ),
-                                errorBorder: const OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
-                                    borderSide: BorderSide(
-                                      width: 1,
-                                      color: Colors.red,
-                                    )),
-                                focusedErrorBorder: const OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10)),
-                                  borderSide: BorderSide(
-                                    width: 1,
-                                    color: Colors.red,
-                                  ),
-                                ),
-                                hintText: Languages.of(context)!.password,
-                                // labelStyle: TextStyle(
-                                //   color: Colors.red
-                                // ),
-                                // labelText: Languages.of(context)!.password,
-                                hintStyle: const TextStyle(
-                                  fontFamily: Constants.fontfamily,
-                                )),
-                          ),
-                        ),
-
-                        GestureDetector(
-                            onTap: () {
-                              Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const ForgetPasswordScreen()),
-                                  ModalRoute.withName("forgetPassword_screen"));
-                            },
-                            child: forgetPassword(height)),
-                        Container(
-                          margin: EdgeInsets.only(top: height * 0.05),
-                          child: ResuableMaterialButtonSmall(
-                            onpress: () {
-                              handleLoginUser();
-                            },
-                            buttonname: Languages.of(context)!.login,
-                          ),
-                        ),
-                      ],
+                    SizedBox(
+                      height: height * 0.02,
+                    ),
+                    mainText2(width),
+                    SizedBox(
+                      height: height * 0.01,
                     ),
                     SizedBox(
-                      height: height * 0.03,
+                      height: height * 0.2,
+                      width: width * 0.4,
+                      child: Image.asset('assets/quotes_data/NoPath.png'),
                     ),
-                    Visibility(
-                      visible: _isLoading == true,
-                      child: const Center(
-                        child: CircularProgressIndicator(
-                          color: Color(0xFF256D85),
-                        ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                          vertical: height * 0.02, horizontal: width * 0.04),
+                      child: TextFormField(
+                        key: _emailKey,
+                        controller: _controllerEmail,
+                        focusNode: _emailFocusNode,
+                        keyboardType: TextInputType.emailAddress,
+                        textInputAction: TextInputAction.next,
+                        cursorColor: Colors.black,
+                        validator: validateEmail,
+                        onFieldSubmitted: (_) {
+                          FocusScope.of(context)
+                              .requestFocus(_passwordFocusNode);
+                        },
+                        decoration: InputDecoration(
+                            errorMaxLines: 3,
+                            counterText: "",
+                            filled: true,
+                            fillColor: Colors.white,
+                            focusedBorder: const OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                              borderSide: BorderSide(
+                                width: 1,
+                                color: Colors.white12,
+                              ),
+                            ),
+                            disabledBorder: const OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                              borderSide: BorderSide(
+                                width: 1,
+                                color: Color(0xFF256D85),
+                              ),
+                            ),
+                            enabledBorder: const OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                              borderSide: BorderSide(
+                                width: 1,
+                                color: Color(0xFF256D85),
+                              ),
+                            ),
+                            border: const OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                              borderSide: BorderSide(
+                                width: 1,
+                              ),
+                            ),
+                            errorBorder: const OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                                borderSide: BorderSide(
+                                  width: 1,
+                                  color: Colors.red,
+                                )),
+                            focusedErrorBorder: const OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                              borderSide: BorderSide(
+                                width: 1,
+                                color: Colors.red,
+                              ),
+                            ),
+                            hintText: Languages.of(context)!.email,
+                            // labelText: Languages.of(context)!.email,
+                            hintStyle: const TextStyle(
+                              fontFamily: Constants.fontfamily,
+                            )),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                          vertical: height * 0.02, horizontal: width * 0.04),
+                      child: TextFormField(
+                        key: _passwordKey,
+                        controller: _controllerPassword,
+                        focusNode: _passwordFocusNode,
+                        keyboardType: TextInputType.emailAddress,
+                        textInputAction: TextInputAction.next,
+                        cursorColor: Colors.black,
+                        validator: validatePassword,
+                        obscureText: true,
+                        onFieldSubmitted: (_) {
+                          FocusScope.of(context)
+                              .requestFocus(_emailFocusNode);
+                        },
+                        decoration: InputDecoration(
+                            errorMaxLines: 3,
+                            counterText: "",
+                            filled: true,
+                            fillColor: Colors.white,
+                            focusedBorder: const OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                              borderSide: BorderSide(
+                                width: 1,
+                                color: Colors.black12,
+                              ),
+                            ),
+                            disabledBorder: const OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                              borderSide: BorderSide(
+                                width: 1,
+                                color: Colors.black12,
+                              ),
+                            ),
+                            enabledBorder: const OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                              borderSide: BorderSide(
+                                width: 1,
+                                color: Color(0xFF256D85),
+                              ),
+                            ),
+                            border: const OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                              borderSide: BorderSide(
+                                width: 1,
+                              ),
+                            ),
+                            errorBorder: const OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                                borderSide: BorderSide(
+                                  width: 1,
+                                  color: Colors.red,
+                                )),
+                            focusedErrorBorder: const OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                              borderSide: BorderSide(
+                                width: 1,
+                                color: Colors.red,
+                              ),
+                            ),
+                            hintText: Languages.of(context)!.password,
+                            // labelStyle: TextStyle(
+                            //   color: Colors.red
+                            // ),
+                            // labelText: Languages.of(context)!.password,
+                            hintStyle: const TextStyle(
+                              fontFamily: Constants.fontfamily,
+                            )),
                       ),
                     ),
                     GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const SignUpScreen()));
-                      },
-                      child: Container(
-                        margin: EdgeInsets.only(
-                          top: height * 0.1,
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0),
-                          child: Text(
-                            Languages.of(context)!.donthaveanaccountSignUp,
-                            style: TextStyle(
-                                color: Colors.white, fontSize: width * 0.04),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
+                        onTap: () {
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ForgetPasswordScreen()),
+                              ModalRoute.withName("forgetPassword_screen"));
+                        },
+                        child: forgetPassword(height)),
+                    Container(
+                      margin: EdgeInsets.only(top: height * 0.03),
+                      child: ResuableMaterialButtonSmall(
+                        onpress: () {
+                          handleLoginUser();
+                        },
+                        buttonname: Languages.of(context)!.login,
                       ),
                     ),
-                    SizedBox(
-                      height: height * 0.15,
+                    Platform.isIOS ? Container() : Padding(
+                      padding: EdgeInsets.only(top: height * 0.03),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                              width: width * 0.2,
+                              height: 1,
+                              decoration: BoxDecoration(
+                                  color: const Color(0xff3a6c83))),
+                          Text(Languages.of(context)!.continueWith,
+                              style: const TextStyle(
+                                  color: const Color(0xff002333),
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: "Lato",
+                                  fontStyle: FontStyle.normal,
+                                  fontSize: 12.0),
+                              textAlign: TextAlign.center),
+                          Container(
+                              width: width * 0.2,
+                              height: 1,
+                              decoration: BoxDecoration(
+                                  color: const Color(0xff3a6c83)))
+                        ],
+                      ),
+                    ),
+                    Platform.isIOS ? Container() :Padding(
+                      padding: EdgeInsets.only(top: height * 0.03),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SvgPicture.asset(
+                              "assets/quotes_data/google_login.svg", //asset location
+
+                              fit: BoxFit.scaleDown),
+                          SizedBox(
+                            width: width * 0.02,
+                          ),
+                          SvgPicture.asset(
+                              "assets/quotes_data/facebook_login.svg", //asset location
+
+                              fit: BoxFit.scaleDown),
+                          SizedBox(
+                            width: width * 0.02,
+                          ),
+                          SvgPicture.asset(
+                              "assets/quotes_data/apple_login.svg", //asset location
+                              fit: BoxFit.scaleDown)
+                        ],
+                      ),
                     ),
                   ],
                 ),
-              ),
+                SizedBox(
+                  height: height * 0.03,
+                ),
+                Visibility(
+                  visible: _isLoading == true,
+                  child: const Center(
+                    child: CircularProgressIndicator(
+                      color: Color(0xFF256D85),
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                const SignUpScreen_Second()));
+                  },
+                  child: Container(
+                    margin: EdgeInsets.only(
+                      top: height * 0.02,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child: Text(
+                        Languages.of(context)!.donthaveanaccountSignUp,
+                        style: const TextStyle(
+                            color: const Color(0xff3a6c83),
+                            fontWeight: FontWeight.w700,
+                            fontFamily: "Lato",
+                            fontStyle: FontStyle.normal,
+                            fontSize: 14.0),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: height * 0.15,
+                ),
+              ],
             ),
           ),
         ),
@@ -401,15 +416,6 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           textAlign: TextAlign.center,
         ),
-        // const SizedBox(width: 10.0,),
-        // Text(
-        //   'Novel Flex',style: TextStyle(
-        //     color: const Color(0xFF256D85),
-        //     fontSize: width*0.05,
-        //     fontWeight: FontWeight.w800
-        // ),
-        //   textAlign: TextAlign.center,
-        // ),
       ],
     );
   }
@@ -435,10 +441,12 @@ class _LoginScreenState extends State<LoginScreen> {
       children: [
         Text(
           Languages.of(context)!.login,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: width * 0.06,
-            fontWeight: FontWeight.w800, fontFamily: Constants.fontfamily,),
+          style: const TextStyle(
+              color: const Color(0xff002333),
+              fontWeight: FontWeight.w700,
+              fontFamily: "Lato",
+              fontStyle: FontStyle.normal,
+              fontSize: 14.0),
           textAlign: TextAlign.center,
         ),
       ],
@@ -449,30 +457,34 @@ class _LoginScreenState extends State<LoginScreen> {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
     return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              margin: EdgeInsets.only(top: height * 0.03, right: height * 0.04,left: height * 0.04),
+              margin: EdgeInsets.only(
+                  top: height * 0.01,
+                  right: height * 0.04,
+                  left: height * 0.04),
               child: Text(
                 Languages.of(context)!.forgetPassword,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: height * 0.02,
-                  fontWeight: FontWeight.w500,
-                  fontFamily: Constants.fontfamily,
-                ),
+                style: const TextStyle(
+                    color: const Color(0xff002333),
+                    fontWeight: FontWeight.w400,
+                    fontFamily: "Lato",
+                    fontStyle: FontStyle.normal,
+                    fontSize: 12.0),
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(right: height * 0.04,left: height * 0.04),
+              padding:
+                  EdgeInsets.only(right: height * 0.04, left: height * 0.04),
               child: SizedBox(
-                width: width * 0.3,
+                width: width * 0.24,
                 child: const Divider(
-                  color: Colors.white,
-                  thickness: 2.0,
+                  color: Colors.black,
+                  thickness: 1.0,
                 ),
               ),
             )
@@ -510,7 +522,6 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() {
       _isLoading = true;
     });
-
     var map = Map<String, dynamic>();
     map['email'] = _controllerEmail!.text.trim();
     map['password'] = _controllerPassword!.text.trim();
@@ -522,61 +533,29 @@ class _LoginScreenState extends State<LoginScreen> {
 
     var jsonData;
 
-    switch (response.statusCode) {
-      case 200:
-        //Success
+    if (response.statusCode == 200) {
+      //Success
 
-        var jsonData = json.decode(response.body);
-        print('loginSuccess_data: $jsonData');
-        if (jsonData['status'] == 200) {
-          _userModel = UserModel.fromJson(jsonData);
-          saveToPreferencesUserDetail(_userModel);
-          _navigateAndRemove();
+       jsonData = json.decode(response.body);
+      print('loginSuccess_data: $jsonData');
+      if (jsonData['status'] == 200) {
+        _userModel = UserModel.fromJson(jsonData);
+        saveToPreferencesUserDetail(_userModel);
+        _navigateAndRemove();
 
-          ToastConstant.showToast(context, "Login Successfully");
-        } else {
-          ToastConstant.showToast(context, "Invalid Credential!");
-          setState(() {
-            _isLoading = false;
-          });
-        }
+        ToastConstant.showToast(context, "Login Successfully");
+        setState(() {
+          _isLoading = false;
+        });
 
-        break;
-      case 401:
-        jsonData = json.decode(response.body);
-        print('jsonData 401: $jsonData');
-        break;
-      case 400:
-        jsonData = json.decode(response.body);
-        print('jsonData 400: $jsonData');
-
-        ToastConstant.showToast(context, "Invalid email or password");
-
-        break;
-      case 404:
-        jsonData = json.decode(response.body);
-        print('jsonData 404: $jsonData');
-        break;
-      case 405:
-        jsonData = json.decode(response.body);
-        print('jsonData 405: $jsonData');
-        break;
-      case 422:
-        //Unprocessable Entity
-        jsonData = json.decode(response.body);
-        print('jsonData 422: $jsonData');
-        break;
-      case 500:
-        jsonData = json.decode(response.body);
-        print('jsonData 500: $jsonData');
-        break;
-      default:
-        jsonData = json.decode(response.body);
-        print('jsonData failed: $jsonData');
-        ToastConstant.showToast(context, "Login Failed Try Again");
-    }
-
-    if (this.mounted) {
+      } else {
+        ToastConstant.showToast(context, "Invalid Credential!");
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    } else {
+      ToastConstant.showToast(context, "Internet Server Error!");
       setState(() {
         _isLoading = false;
       });
@@ -587,11 +566,11 @@ class _LoginScreenState extends State<LoginScreen> {
     UserProvider userProvider =
         Provider.of<UserProvider>(context, listen: false);
 
-    userProvider.setUserEmail(_userModel!.data.email);
-    userProvider.setUserToken(_userModel.data.accessToken);
-    userProvider.setUserName(_userModel.data.fname);
+    userProvider.setUserEmail(_userModel!.data!.email!);
+    userProvider.setUserToken(_userModel.data!.accessToken!);
+    userProvider.setUserName(_userModel.data!.fname!);
     // userProvider.setUserImage(_userModel.data.img);
-    userProvider.setUserID(_userModel.data.id.toString());
+    userProvider.setUserID(_userModel.data!.id!.toString());
     userProvider.setLanguage("English");
   }
 }

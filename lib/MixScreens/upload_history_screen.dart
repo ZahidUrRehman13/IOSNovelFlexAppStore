@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:connectivity/connectivity.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/components/list_tile/gf_list_tile.dart';
 import 'package:http/http.dart' as http;
@@ -16,6 +17,7 @@ import '../Utils/ApiUtils.dart';
 import '../Utils/Constants.dart';
 import '../Utils/toast.dart';
 import '../localization/Language/languages.dart';
+import 'BookDetailEditScreen.dart';
 import 'BookDetailScreen.dart';
 import 'UploadDataScreen.dart';
 
@@ -82,7 +84,7 @@ class _UploadscreenState extends State<Uploadscreen> {
               Navigator.pop(context);
             },
             icon: const Icon(
-              Icons.arrow_back,
+              Icons.arrow_back_ios,
               size: 35,
               color: Colors.white,
             ),
@@ -182,11 +184,12 @@ class _UploadscreenState extends State<Uploadscreen> {
             : _isLoading
             ? const Align(
           alignment: Alignment.center,
-          child: CircularProgressIndicator(
-            valueColor:  AlwaysStoppedAnimation<Color>(
-              Color(0xFF256D85),
+          child: const Center(
+            child: CupertinoActivityIndicator(
+              color: const Color(0xFF256D85),
+              radius: 20,
             ),
-          ),
+          )
         ) : _emtyFlag
             ? Center(
           child: Text(
@@ -246,13 +249,13 @@ class _UploadscreenState extends State<Uploadscreen> {
                            Container(
                                decoration: BoxDecoration(
                                  borderRadius: BorderRadius.circular(5.0),
-                                 color: Colors.orange,
+                                 color: Color(0xFF256D85),
                                ),
                                height: _height*0.04,
                                width: _width*0.25,
                                child: Center(child: Padding(
                              padding: const EdgeInsets.only(left: 15),
-                             child: Text(_userUploadHistoryModel!.data![index].categoryTitle.toString(),style: TextStyle(fontFamily: Constants.fontfamily,),),
+                             child: Text(_userUploadHistoryModel!.data![index].categoryTitle.toString(),style: TextStyle(fontFamily: Constants.fontfamily,color: Colors.white),),
                            ))),
 
                         ],
@@ -282,12 +285,21 @@ class _UploadscreenState extends State<Uploadscreen> {
                     ),
                     GestureDetector(
                       onTap: (){
-                        getPdfAndUpload(_userUploadHistoryModel!.data![index].id.toString());
+                        // getPdfAndUpload(_userUploadHistoryModel!.data![index].id.toString());
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    BookDetailEditScreen(
+                                      BookID:
+                                      '${_userUploadHistoryModel!.data![index].id!}',
+                                    )));
+
                       },
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5.0),
-                          color: Colors.orange,
+                          color: Color(0xFF256D85),
                         ),
                         height: _height*0.04,
                         width: _width*0.25,
@@ -295,7 +307,7 @@ class _UploadscreenState extends State<Uploadscreen> {
                         margin: EdgeInsets.only(top: _height*0.22,right: _width*0.1,left: _width*0.03),
                         child: Center(
                           child: Text(Languages.of(context)!.EditButton,textAlign: TextAlign.end,
-                          style: const TextStyle(fontSize: 15,color: Colors.black,fontFamily: Constants.fontfamily,),),
+                          style: const TextStyle(fontSize: 15,color: Colors.white,fontFamily: Constants.fontfamily,),),
                         ),
                       ),
                     )

@@ -73,22 +73,20 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
     var _height = MediaQuery.of(context).size.height;
     var _width = MediaQuery.of(context).size.width;
     return Scaffold(
-        backgroundColor: Colors.white,
-        // appBar: AppBar(
-        //   toolbarHeight: _height*0.1,
-        //   title: Text(Languages.of(context)!.forgetPassword,style: TextStyle( color: const Color(0xFF256D85),fontSize: _width*0.043),),
-        //   centerTitle: true,
-        //   backgroundColor: Colors.white,
-        //   elevation: 0.0,
-        //   // leading: IconButton(
-        //   //     onPressed: (){
-        //   //       SchedulerBinding.instance.addPostFrameCallback((_) {
-        //   //         Navigator.of(context).pushNamedAndRemoveUntil(
-        //   //             'slider_screen', (Route<dynamic> route) => false);
-        //   //       });
-        //   //     },
-        //   //     icon: Icon(Icons.arrow_back,size: _height*0.032,color: Colors.black54,)),
-        // ),
+        backgroundColor: const Color(0xffebf5f9),
+        appBar: AppBar(
+          toolbarHeight: _height*0.1,
+          title: Text(Languages.of(context)!.forgetPassword,style: TextStyle( color: const Color(0xFF256D85),fontSize: _width*0.043),),
+          centerTitle: true,
+          backgroundColor:const Color(0xffebf5f9),
+          elevation: 0.0,
+          leading: IconButton(
+              onPressed: (){
+
+                Navigator.pop(context);
+              },
+              icon: Icon(Icons.arrow_back,size: _height*0.03,color: Colors.black54,)),
+        ),
         body: SafeArea(
           child: GestureDetector(
             onTap: () {
@@ -98,333 +96,335 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                 currentFocus.focusedChild!.unfocus();
               }
             },
-            child: SingleChildScrollView(
-              child: Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    colorFilter: ColorFilter.mode(
-                        Colors.black12.withOpacity(0.9), BlendMode.dstATop),
-                    opacity: 100.0,
-                    image: AssetImage("assets/manga_books.jpg"),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Visibility(
+                  visible: _firstScreenVisisbility,
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                            width: _width*0.5 ,
+                            height: _height*0.2,
+                            decoration: BoxDecoration(
+                                color:  Colors.black12,
+                              borderRadius: BorderRadius.circular(20)
+                            ),
+                          child: Icon(Icons.lock,color:  const Color(0xff3a6c83),size: _height*_width*0.0003,),
+                        ),
+                        Padding(padding: EdgeInsets.only(top: _height*0.03 ),
+                        child:Text(
+                            Languages.of(context)!.resetPasswordtxt,
+                            style: const TextStyle(
+                                color:  const Color(0xff3a6c83),
+                                fontWeight: FontWeight.w700,
+                                fontFamily: "Lato",
+                                fontStyle:  FontStyle.normal,
+                                fontSize: 20.0
+                            ),
+                            textAlign: TextAlign.center
+                        ), ),
+                        Padding(padding: EdgeInsets.only(top: _height*0.03 ),
+                          child:Text(
+                              Languages.of(context)!.resetPasswordtxt2,
+                              style: const TextStyle(
+                                  color:  const Color(0xff002333),
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: "Lato",
+                                  fontStyle:  FontStyle.normal,
+                                  fontSize: 12.0
+                              ),
+                              textAlign: TextAlign.center
+                          ) ),
+                        Padding(
+                          padding:  EdgeInsets.only(left: _width*0.05,right: _width*0.05,top: _height*0.05),
+                          child: TextFormField(
+                            key: _emailKey,
+                            controller: _controllerEmail,
+                            focusNode: _emailFocusNode,
+                            keyboardType: TextInputType.emailAddress,
+                            textInputAction: TextInputAction.next,
+                            cursorColor: Colors.black,
+                            validator: validateEmail,
+                            onFieldSubmitted: (_) {
+                              FocusScope.of(context).requestFocus();
+                            },
+                            decoration: InputDecoration(
+                                errorMaxLines: 3,
+                                counterText: "",
+                                filled: true,
+                                fillColor: Colors.white,
+                                focusedBorder: const OutlineInputBorder(
+                                  borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                                  borderSide: BorderSide(
+                                    width: 1,
+                                    color: Color(0xFF256D85),
+                                  ),
+                                ),
+                                disabledBorder: const OutlineInputBorder(
+                                  borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                                  borderSide: BorderSide(
+                                    width: 1,
+                                    color: Color(0xFF256D85),
+                                  ),
+                                ),
+                                enabledBorder: const OutlineInputBorder(
+                                  borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                                  borderSide: BorderSide(
+                                    width: 1,
+                                    color: Color(0xFF256D85),
+                                  ),
+                                ),
+                                border: const OutlineInputBorder(
+                                  borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                                  borderSide: BorderSide(
+                                    width: 1,
+                                  ),
+                                ),
+                                errorBorder: const OutlineInputBorder(
+                                    borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Colors.red,
+                                    )),
+                                focusedErrorBorder: const OutlineInputBorder(
+                                  borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                                  borderSide: BorderSide(
+                                    width: 1,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                                hintText: Languages.of(context)!.email,
+                                // labelText: Languages.of(context)!.email,
+                                hintStyle: const TextStyle(
+                                  fontFamily: Constants.fontfamily,
+
+                                )),
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(top: _height * 0.06),
+                          child: ResuableMaterialButtonSmall(
+                            onpress: () {
+                              handleResetUser();
+
+                            },
+                            buttonname: Languages.of(context)!.forgetPassword,
+                          ),
+                        ),
+                        Visibility(
+                          visible: _isLoading,
+                          child: Padding(
+                            padding:  EdgeInsets.only(top: _height*0.1),
+                            child: const Center(
+                              child: CircularProgressIndicator(
+                                  color:Color(0xFF256D85)
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Form(
-                      key: _formKey,
-                      child: Visibility(
-                        visible: _firstScreenVisisbility,
-                        child: Column(
-                          children: [
-                            SizedBox(
-                              height: _height*0.1,
-                            ),
-                            mainText2(_width),
-                            Center(
-                              child: Padding(
-                                padding: EdgeInsets.only(
-                                    top: _height * 0.2,
-                                    right: _width * 0.04,
-                                    left: _width * 0.04),
-                                child: TextFormField(
-                                  key: _emailKey,
-                                  controller: _controllerEmail,
-                                  focusNode: _emailFocusNode,
-                                  keyboardType: TextInputType.emailAddress,
-                                  textInputAction: TextInputAction.next,
-                                  cursorColor: Colors.black,
-                                  validator: validateEmail,
-                                  onFieldSubmitted: (_) {
-                                    FocusScope.of(context).requestFocus();
-                                  },
-                                  decoration: InputDecoration(
-                                      errorMaxLines: 3,
-                                      counterText: "",
-                                      filled: true,
-                                      fillColor: Colors.white,
-                                      focusedBorder: const OutlineInputBorder(
-                                        borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
-                                        borderSide: BorderSide(
-                                          width: 1,
-                                          color: Color(0xFF256D85),
-                                        ),
-                                      ),
-                                      disabledBorder: const OutlineInputBorder(
-                                        borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
-                                        borderSide: BorderSide(
-                                          width: 1,
-                                          color: Color(0xFF256D85),
-                                        ),
-                                      ),
-                                      enabledBorder: const OutlineInputBorder(
-                                        borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
-                                        borderSide: BorderSide(
-                                          width: 1,
-                                          color: Color(0xFF256D85),
-                                        ),
-                                      ),
-                                      border: const OutlineInputBorder(
-                                        borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
-                                        borderSide: BorderSide(
-                                          width: 1,
-                                        ),
-                                      ),
-                                      errorBorder: const OutlineInputBorder(
-                                          borderRadius:
-                                          BorderRadius.all(Radius.circular(10)),
-                                          borderSide: BorderSide(
-                                            width: 1,
-                                            color: Colors.red,
-                                          )),
-                                      focusedErrorBorder: const OutlineInputBorder(
-                                        borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
-                                        borderSide: BorderSide(
-                                          width: 1,
-                                          color: Colors.red,
-                                        ),
-                                      ),
-                                      hintText: Languages.of(context)!.email,
-                                      // labelText: Languages.of(context)!.email,
-                                      hintStyle: const TextStyle(
-                                        fontFamily: Constants.fontfamily,
-
-                                      )),
-                                ),
+                Visibility(
+                  visible: _secondScreenVisibilities,
+                  child: Form(
+                    key: _formKey1,
+                    child: Column(
+                      children: [
+                        SizedBox(height: _height*0.05,),
+                        mainText2(_width),
+                        Visibility(
+                          visible: _isLoading,
+                          child: Padding(
+                            padding:  EdgeInsets.only(top: _height*0.1),
+                            child: const Center(
+                              child: CircularProgressIndicator(
+                                  color:Color(0xFF256D85)
                               ),
                             ),
-                            Center(
-                              child: Container(
-                                margin: EdgeInsets.only(top: _height * 0.06),
-                                child: ResuableMaterialButtonSmall(
-                                  onpress: () {
-                                    handleResetUser();
-
-                                  },
-                                  buttonname: Languages.of(context)!.forgetPassword,
-                                ),
-                              ),
-                            ),
-                            Visibility(
-                              visible: _isLoading,
-                              child: Padding(
-                                padding:  EdgeInsets.only(top: _height*0.1),
-                                child: const Center(
-                                  child: CircularProgressIndicator(
-                                      color:Color(0xFF256D85)
-                                  ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: _height*0.433,
-                            )
-                          ],
+                          ),
                         ),
-                      ),
+                        Center(
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                                top: _height * 0.1,
+                                right: _width * 0.04,
+                                left: _width * 0.04),
+                            child: TextFormField(
+                              key: _passKey,
+                              controller: _passcontoller,
+                              focusNode: _passwordFNode,
+                              obscureText: true,
+                              textInputAction: TextInputAction.next,
+                              cursorColor: Colors.black,
+                              validator: validatePassword,
+                              onFieldSubmitted: (_) {
+                                FocusScope.of(context).requestFocus();
+                              },
+                              decoration: InputDecoration(
+                                  errorMaxLines: 3,
+                                  counterText: "",
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  focusedBorder: const OutlineInputBorder(
+                                    borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Color(0xFF256D85),
+                                    ),
+                                  ),
+                                  disabledBorder: const OutlineInputBorder(
+                                    borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Color(0xFF256D85),
+                                    ),
+                                  ),
+                                  enabledBorder: const OutlineInputBorder(
+                                    borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Color(0xFF256D85),
+                                    ),
+                                  ),
+                                  border: const OutlineInputBorder(
+                                    borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                    ),
+                                  ),
+                                  errorBorder: const OutlineInputBorder(
+                                      borderRadius:
+                                      BorderRadius.all(Radius.circular(10)),
+                                      borderSide: BorderSide(
+                                        width: 1,
+                                        color: Colors.red,
+                                      )),
+                                  focusedErrorBorder: const OutlineInputBorder(
+                                    borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                  hintText: Languages.of(context)!.newFpassword,
+                                  // labelText: Languages.of(context)!.email,
+                                  hintStyle: const TextStyle(
+                                    fontFamily: Constants.fontfamily,
+
+                                  )),
+                            ),
+                          ),
+                        ),
+                        Center(
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                                top: _height * 0.05,
+                                right: _width * 0.04,
+                                left: _width * 0.04),
+                            child: TextFormField(
+                              key: _cPassKey,
+                              controller: _cPAsscontroller,
+                              focusNode:_confirmPasswordFocusNode ,
+                              textInputAction: TextInputAction.next,
+                              cursorColor: Colors.black,
+                              obscureText: true,
+                              validator: validatePassword,
+                              onFieldSubmitted: (_) {
+                                FocusScope.of(context).requestFocus();
+                              },
+                              decoration: InputDecoration(
+                                  errorMaxLines: 3,
+                                  counterText: "",
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  focusedBorder: const OutlineInputBorder(
+                                    borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Color(0xFF256D85),
+                                    ),
+                                  ),
+                                  disabledBorder: const OutlineInputBorder(
+                                    borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Color(0xFF256D85),
+                                    ),
+                                  ),
+                                  enabledBorder: const OutlineInputBorder(
+                                    borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Color(0xFF256D85),
+                                    ),
+                                  ),
+                                  border: const OutlineInputBorder(
+                                    borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                    ),
+                                  ),
+                                  errorBorder: const OutlineInputBorder(
+                                      borderRadius:
+                                      BorderRadius.all(Radius.circular(10)),
+                                      borderSide: BorderSide(
+                                        width: 1,
+                                        color: Colors.red,
+                                      )),
+                                  focusedErrorBorder: const OutlineInputBorder(
+                                    borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                  hintText: Languages.of(context)!.confirmnewpassword,
+                                  // labelText: Languages.of(context)!.email,
+                                  hintStyle: const TextStyle(
+                                    fontFamily: Constants.fontfamily,
+
+                                  )),
+                            ),
+                          ),
+                        ),
+                        Center(
+                          child: Container(
+                            margin: EdgeInsets.only(top: _height * 0.06),
+                            child: ResuableMaterialButtonSmall(
+                              onpress: () {
+                                handleForgetUser();
+                              },
+                              buttonname: Languages.of(context)!.doneText,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    Form(
-                      key: _formKey1,
-                      child: Visibility(
-                        visible: _secondScreenVisibilities,
-                        child: Column(
-                          children: [
-                            SizedBox(
-                              height: _height*0.1,
-                            ),
-                            mainText2(_width),
-                            Visibility(
-                              visible: _isLoading,
-                              child: Padding(
-                                padding:  EdgeInsets.only(top: _height*0.1),
-                                child: const Center(
-                                  child: CircularProgressIndicator(
-                                      color:Color(0xFF256D85)
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Center(
-                              child: Padding(
-                                padding: EdgeInsets.only(
-                                    top: _height * 0.2,
-                                    right: _width * 0.04,
-                                    left: _width * 0.04),
-                                child: TextFormField(
-                                  key: _passKey,
-                                  controller: _passcontoller,
-                                  focusNode: _passwordFNode,
-                                  obscureText: true,
-                                  textInputAction: TextInputAction.next,
-                                  cursorColor: Colors.black,
-                                  validator: validatePassword,
-                                  onFieldSubmitted: (_) {
-                                    FocusScope.of(context).requestFocus();
-                                  },
-                                  decoration: InputDecoration(
-                                      errorMaxLines: 3,
-                                      counterText: "",
-                                      filled: true,
-                                      fillColor: Colors.white,
-                                      focusedBorder: const OutlineInputBorder(
-                                        borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
-                                        borderSide: BorderSide(
-                                          width: 1,
-                                          color: Color(0xFF256D85),
-                                        ),
-                                      ),
-                                      disabledBorder: const OutlineInputBorder(
-                                        borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
-                                        borderSide: BorderSide(
-                                          width: 1,
-                                          color: Color(0xFF256D85),
-                                        ),
-                                      ),
-                                      enabledBorder: const OutlineInputBorder(
-                                        borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
-                                        borderSide: BorderSide(
-                                          width: 1,
-                                          color: Color(0xFF256D85),
-                                        ),
-                                      ),
-                                      border: const OutlineInputBorder(
-                                        borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
-                                        borderSide: BorderSide(
-                                          width: 1,
-                                        ),
-                                      ),
-                                      errorBorder: const OutlineInputBorder(
-                                          borderRadius:
-                                          BorderRadius.all(Radius.circular(10)),
-                                          borderSide: BorderSide(
-                                            width: 1,
-                                            color: Colors.red,
-                                          )),
-                                      focusedErrorBorder: const OutlineInputBorder(
-                                        borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
-                                        borderSide: BorderSide(
-                                          width: 1,
-                                          color: Colors.red,
-                                        ),
-                                      ),
-                                      hintText: Languages.of(context)!.newFpassword,
-                                      // labelText: Languages.of(context)!.email,
-                                      hintStyle: const TextStyle(
-                                        fontFamily: Constants.fontfamily,
-
-                                      )),
-                                ),
-                              ),
-                            ),
-                            Center(
-                              child: Padding(
-                                padding: EdgeInsets.only(
-                                    top: _height * 0.05,
-                                    right: _width * 0.04,
-                                    left: _width * 0.04),
-                                child: TextFormField(
-                                  key: _cPassKey,
-                                  controller: _cPAsscontroller,
-                                  focusNode:_confirmPasswordFocusNode ,
-                                  textInputAction: TextInputAction.next,
-                                  cursorColor: Colors.black,
-                                  obscureText: true,
-                                  validator: validatePassword,
-                                  onFieldSubmitted: (_) {
-                                    FocusScope.of(context).requestFocus();
-                                  },
-                                  decoration: InputDecoration(
-                                      errorMaxLines: 3,
-                                      counterText: "",
-                                      filled: true,
-                                      fillColor: Colors.white,
-                                      focusedBorder: const OutlineInputBorder(
-                                        borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
-                                        borderSide: BorderSide(
-                                          width: 1,
-                                          color: Color(0xFF256D85),
-                                        ),
-                                      ),
-                                      disabledBorder: const OutlineInputBorder(
-                                        borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
-                                        borderSide: BorderSide(
-                                          width: 1,
-                                          color: Color(0xFF256D85),
-                                        ),
-                                      ),
-                                      enabledBorder: const OutlineInputBorder(
-                                        borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
-                                        borderSide: BorderSide(
-                                          width: 1,
-                                          color: Color(0xFF256D85),
-                                        ),
-                                      ),
-                                      border: const OutlineInputBorder(
-                                        borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
-                                        borderSide: BorderSide(
-                                          width: 1,
-                                        ),
-                                      ),
-                                      errorBorder: const OutlineInputBorder(
-                                          borderRadius:
-                                          BorderRadius.all(Radius.circular(10)),
-                                          borderSide: BorderSide(
-                                            width: 1,
-                                            color: Colors.red,
-                                          )),
-                                      focusedErrorBorder: const OutlineInputBorder(
-                                        borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
-                                        borderSide: BorderSide(
-                                          width: 1,
-                                          color: Colors.red,
-                                        ),
-                                      ),
-                                      hintText: Languages.of(context)!.confirmnewpassword,
-                                      // labelText: Languages.of(context)!.email,
-                                      hintStyle: const TextStyle(
-                                        fontFamily: Constants.fontfamily,
-
-                                      )),
-                                ),
-                              ),
-                            ),
-                            Center(
-                              child: Container(
-                                margin: EdgeInsets.only(top: _height * 0.06),
-                                child: ResuableMaterialButtonSmall(
-                                  onpress: () {
-                                    handleForgetUser();
-                                  },
-                                  buttonname: Languages.of(context)!.doneText,
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: _height*0.433,
-                            )
-                          ],
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
+                  ),
+                )
+              ],
             ),
           ),
         ));
@@ -498,12 +498,15 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          Languages.of(context)!.forgetPassword,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: width * 0.06,
-            fontWeight: FontWeight.w800, fontFamily: Constants.fontfamily,),
-          textAlign: TextAlign.center,
+          Languages.of(context)!.newPasswordCreate,
+            style: const TextStyle(
+                color:  const Color(0xff3a6c83),
+                fontWeight: FontWeight.w700,
+                fontFamily: "Lato",
+                fontStyle:  FontStyle.normal,
+                fontSize: 20.0
+            ),
+            textAlign: TextAlign.center
         ),
       ],
     );

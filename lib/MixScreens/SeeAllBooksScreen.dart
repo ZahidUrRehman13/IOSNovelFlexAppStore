@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:connectivity/connectivity.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -56,6 +57,20 @@ class _SeeAllBookScreenState extends State<SeeAllBookScreen> {
     var _width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        toolbarHeight: _height * 0.07,
+        backgroundColor: const Color(0xFF256D85),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(
+            Icons.arrow_back_ios,
+            size: 35,
+            color: Colors.white,
+          ),
+        ),
+      ),
       body: _isInternetConnected == false
           ? SafeArea(
               child: Center(
@@ -114,14 +129,12 @@ class _SeeAllBookScreenState extends State<SeeAllBookScreen> {
               ),
             )
           : _isLoading
-              ? const Align(
-                  alignment: Alignment.center,
-                  child: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                      Color(0xFF256D85),
-                    ),
-                  ),
-                )
+              ? const Center(
+        child: CupertinoActivityIndicator(
+          color: Colors.white12,
+          radius: 20,
+        ),
+      )
               : Padding(
                   padding: EdgeInsets.only(top: _height * 0.02),
                   child: GridView.builder(

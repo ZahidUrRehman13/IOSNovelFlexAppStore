@@ -95,7 +95,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   checkUpdate()async{
     await AppVersionUpdate.checkForUpdates(
-        appleId: appleId, playStoreId: playStoreId, country: country)
+        // appleId: appleId,
+        playStoreId: playStoreId, country: country)
         .then((data) async {
       print(data.storeUrl);
       print(data.storeVersion);
@@ -123,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    checkUpdate();
+    // checkUpdate();
     // checkVersion();
     // _checkVersionnew();
     // checkForUpdate();
@@ -172,7 +173,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
           ),
-          SizedBox(
+         Platform.isIOS ? Container(): SizedBox(
             child: IconButton(
               onPressed: () {
                 Navigator.push(
@@ -197,11 +198,12 @@ class _HomeScreenState extends State<HomeScreen> {
       body: _isLoading
           ? const Align(
               alignment: Alignment.center,
-              child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(
-                  Color(0xFF256D85),
+              child: const Center(
+                child: CupertinoActivityIndicator(
+                  color: const Color(0xFF256D85),
+                  radius: 20,
                 ),
-              ),
+              )
             )
           : Column(
             mainAxisSize: MainAxisSize.min,
@@ -306,26 +308,32 @@ class _HomeScreenState extends State<HomeScreen> {
                                           width: _width*0.45,
                                           margin: const EdgeInsets.all(3.0),
 
-                                          child: ClipRRect(
-                                            borderRadius: BorderRadius.circular(5.0),
-                                            child: CachedNetworkImage(
-                                              imageUrl:
-                                              _dashBoardModelMain!
-                                                  .data![index]
-                                                  .books![index1]
-                                                  .bookImage!,
-                                              fit: BoxFit.contain,
-                                              placeholder: (context,
-                                                  url) =>
-                                                  const Center(
-                                                      child:
-                                                      CupertinoActivityIndicator(
-                                                        color: Color(0xFF256D85),
-                                                      )),
-                                              errorWidget:
-                                                  (context, url, error) =>
-                                                  const Center(child: Icon(Icons.error_outline)),
+                                          child: CachedNetworkImage(
+                                            filterQuality: FilterQuality.high,
+                                            imageBuilder: (context, imageProvider) => Container(
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.rectangle,
+                                                borderRadius: BorderRadius.circular(10),
+                                                image: DecorationImage(
+                                                    image: imageProvider, fit: BoxFit.cover),
+                                              ),
                                             ),
+                                            imageUrl:
+                                            _dashBoardModelMain!
+                                                .data![index]
+                                                .books![index1]
+                                                .bookImage!,
+                                            fit: BoxFit.contain,
+                                            placeholder: (context,
+                                                url) =>
+                                                const Center(
+                                                    child:
+                                                    CupertinoActivityIndicator(
+                                                      color: Color(0xFF256D85),
+                                                    )),
+                                            errorWidget:
+                                                (context, url, error) =>
+                                                const Center(child: Icon(Icons.error_outline)),
                                           ),
                                         ),
                                         Positioned(

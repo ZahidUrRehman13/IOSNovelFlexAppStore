@@ -1,4 +1,6 @@
 PODS:
+  - advance_pdf_viewer2 (1.0.5):
+    - Flutter
   - connectivity (0.0.1):
     - Flutter
     - Reachability
@@ -47,12 +49,62 @@ PODS:
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
+  - Google-Mobile-Ads-SDK (8.13.0):
+    - GoogleAppMeasurement (< 9.0, >= 7.0)
+    - GoogleUserMessagingPlatform (>= 1.1)
+  - google_mobile_ads (0.0.1):
+    - Flutter
+    - Google-Mobile-Ads-SDK (= 8.13.0)
+  - GoogleAppMeasurement (8.15.0):
+    - GoogleAppMeasurement/AdIdSupport (= 8.15.0)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.7)
+    - GoogleUtilities/MethodSwizzler (~> 7.7)
+    - GoogleUtilities/Network (~> 7.7)
+    - "GoogleUtilities/NSData+zlib (~> 7.7)"
+    - nanopb (~> 2.30908.0)
+  - GoogleAppMeasurement/AdIdSupport (8.15.0):
+    - GoogleAppMeasurement/WithoutAdIdSupport (= 8.15.0)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.7)
+    - GoogleUtilities/MethodSwizzler (~> 7.7)
+    - GoogleUtilities/Network (~> 7.7)
+    - "GoogleUtilities/NSData+zlib (~> 7.7)"
+    - nanopb (~> 2.30908.0)
+  - GoogleAppMeasurement/WithoutAdIdSupport (8.15.0):
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.7)
+    - GoogleUtilities/MethodSwizzler (~> 7.7)
+    - GoogleUtilities/Network (~> 7.7)
+    - "GoogleUtilities/NSData+zlib (~> 7.7)"
+    - nanopb (~> 2.30908.0)
+  - GoogleUserMessagingPlatform (2.0.1)
+  - GoogleUtilities/AppDelegateSwizzler (7.10.0):
+    - GoogleUtilities/Environment
+    - GoogleUtilities/Logger
+    - GoogleUtilities/Network
+  - GoogleUtilities/Environment (7.10.0):
+    - PromisesObjC (< 3.0, >= 1.2)
+  - GoogleUtilities/Logger (7.10.0):
+    - GoogleUtilities/Environment
+  - GoogleUtilities/MethodSwizzler (7.10.0):
+    - GoogleUtilities/Logger
+  - GoogleUtilities/Network (7.10.0):
+    - GoogleUtilities/Logger
+    - "GoogleUtilities/NSData+zlib"
+    - GoogleUtilities/Reachability
+  - "GoogleUtilities/NSData+zlib (7.10.0)"
+  - GoogleUtilities/Reachability (7.10.0):
+    - GoogleUtilities/Logger
   - image_picker_ios (0.0.1):
     - Flutter
+  - nanopb (2.30908.0):
+    - nanopb/decode (= 2.30908.0)
+    - nanopb/encode (= 2.30908.0)
+  - nanopb/decode (2.30908.0)
+  - nanopb/encode (2.30908.0)
   - package_info_plus (0.4.5):
     - Flutter
   - path_provider_ios (0.0.1):
     - Flutter
+  - PromisesObjC (2.1.1)
   - Reachability (3.2)
   - SDWebImage (5.14.2):
     - SDWebImage/Core (= 5.14.2)
@@ -63,22 +115,27 @@ PODS:
     - Flutter
     - FMDB (>= 2.7.5)
   - SwiftyGif (5.4.3)
+  - syncfusion_flutter_pdfviewer (0.0.1):
+    - Flutter
   - Toast (4.0.0)
   - url_launcher_ios (0.0.1):
     - Flutter
 
 DEPENDENCIES:
+  - advance_pdf_viewer2 (from `.symlinks/plugins/advance_pdf_viewer2/ios`)
   - connectivity (from `.symlinks/plugins/connectivity/ios`)
   - file_picker (from `.symlinks/plugins/file_picker/ios`)
   - Flutter (from `Flutter`)
   - flutter_localization (from `.symlinks/plugins/flutter_localization/ios`)
   - flutter_pdfview (from `.symlinks/plugins/flutter_pdfview/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
+  - google_mobile_ads (from `.symlinks/plugins/google_mobile_ads/ios`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
   - shared_preferences_ios (from `.symlinks/plugins/shared_preferences_ios/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
+  - syncfusion_flutter_pdfviewer (from `.symlinks/plugins/syncfusion_flutter_pdfviewer/ios`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
 
 SPEC REPOS:
@@ -86,12 +143,20 @@ SPEC REPOS:
     - DKImagePickerController
     - DKPhotoGallery
     - FMDB
+    - Google-Mobile-Ads-SDK
+    - GoogleAppMeasurement
+    - GoogleUserMessagingPlatform
+    - GoogleUtilities
+    - nanopb
+    - PromisesObjC
     - Reachability
     - SDWebImage
     - SwiftyGif
     - Toast
 
 EXTERNAL SOURCES:
+  advance_pdf_viewer2:
+    :path: ".symlinks/plugins/advance_pdf_viewer2/ios"
   connectivity:
     :path: ".symlinks/plugins/connectivity/ios"
   file_picker:
@@ -104,6 +169,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_pdfview/ios"
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
+  google_mobile_ads:
+    :path: ".symlinks/plugins/google_mobile_ads/ios"
   image_picker_ios:
     :path: ".symlinks/plugins/image_picker_ios/ios"
   package_info_plus:
@@ -114,10 +181,13 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/shared_preferences_ios/ios"
   sqflite:
     :path: ".symlinks/plugins/sqflite/ios"
+  syncfusion_flutter_pdfviewer:
+    :path: ".symlinks/plugins/syncfusion_flutter_pdfviewer/ios"
   url_launcher_ios:
     :path: ".symlinks/plugins/url_launcher_ios/ios"
 
 SPEC CHECKSUMS:
+  advance_pdf_viewer2: e4df833fc3120011b681eb2fa2fb780a3e85f6c3
   connectivity: c4130b2985d4ef6fd26f9702e886bd5260681467
   DKImagePickerController: b512c28220a2b8ac7419f21c491fc8534b7601ac
   DKPhotoGallery: fdfad5125a9fdda9cc57df834d49df790dbb4179
@@ -127,14 +197,22 @@ SPEC CHECKSUMS:
   flutter_pdfview: 25f53dd6097661e6395b17de506e6060585946bd
   fluttertoast: eb263d302cc92e04176c053d2385237e9f43fad0
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
+  Google-Mobile-Ads-SDK: 05e5d68bb42a61b2e5bef336a52789785605aa22
+  google_mobile_ads: 36eaaacc5c08ca2b9c4878232ab98152b11805cc
+  GoogleAppMeasurement: 4c19f031220c72464d460c9daa1fb5d1acce958e
+  GoogleUserMessagingPlatform: 5f8b30daf181805317b6b985bb51c1ff3beca054
+  GoogleUtilities: bad72cb363809015b1f7f19beb1f1cd23c589f95
   image_picker_ios: b786a5dcf033a8336a657191401bfdf12017dabb
+  nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
   path_provider_ios: 14f3d2fd28c4fdb42f44e0f751d12861c43cee02
+  PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   SDWebImage: b9a731e1d6307f44ca703b3976d18c24ca561e84
   shared_preferences_ios: 548a61f8053b9b8a49ac19c1ffbc8b92c50d68ad
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
   SwiftyGif: 6c3eafd0ce693cad58bb63d2b2fb9bacb8552780
+  syncfusion_flutter_pdfviewer: bb9998884b864cfedf72628df3503bdf57e397c0
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   url_launcher_ios: 839c58cdb4279282219f5e248c3321761ff3c4de
 

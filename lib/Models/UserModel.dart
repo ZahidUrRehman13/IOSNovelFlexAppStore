@@ -10,14 +10,14 @@ String userModelToJson(UserModel data) => json.encode(data.toJson());
 
 class UserModel {
   UserModel({
-    required this.status,
-    required this.message,
-    required this.data,
+    this.status,
+    this.message,
+    this.data,
   });
 
-  int status;
-  String message;
-  Data data;
+  int? status;
+  String? message;
+  Data? data;
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
     status: json["status"],
@@ -28,28 +28,30 @@ class UserModel {
   Map<String, dynamic> toJson() => {
     "status": status,
     "message": message,
-    "data": data.toJson(),
+    "data": data!.toJson(),
   };
 }
 
 class Data {
   Data({
-    required this.id,
-    required this.fname,
-    required this.lname,
-    required this.email,
-    required this.password,
+    this.id,
+    this.fname,
+    this.lname,
+    this.email,
+    this.password,
     this.img,
-    required this.accessToken,
+    this.accessToken,
+    this.language,
   });
 
-  String id;
-  String fname;
-  String lname;
-  String email;
-  String password;
-  dynamic img;
-  String accessToken;
+  String? id;
+  String? fname;
+  String? lname;
+  String? email;
+  String? password;
+  String? img;
+  String? accessToken;
+  dynamic language;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
     id: json["id"],
@@ -59,6 +61,7 @@ class Data {
     password: json["password"],
     img: json["img"],
     accessToken: json["accessToken"],
+    language: json["language"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -69,6 +72,6 @@ class Data {
     "password": password,
     "img": img,
     "accessToken": accessToken,
+    "language": language,
   };
 }
-

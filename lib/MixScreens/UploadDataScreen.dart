@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:connectivity/connectivity.dart';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -17,7 +18,9 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
+import '../Models/DropDown2Model.dart';
 import '../Models/DropDownCategoriesModel.dart';
+import '../Models/DropDownSubCategoriesModel.dart';
 import '../Models/PostImageOtherFieldModel.dart';
 import '../Models/UploadMultipleFileModel.dart';
 import '../Provider/UserProvider.dart';
@@ -44,6 +47,7 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
   String? fileName;
   var pathImage;
   String language = "";
+  bool subCategoriesStatus= false;
 
   Future<void> _retrievePath() async {
     final prefs = await SharedPreferences.getInstance();
@@ -81,15 +85,25 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
 
   List<DropDownCategoriesModel>? _dropDownCategoriesModelList;
   DropDownCategoriesModel? _dropDownCategoriesModel;
+
+  List<DropDown2Model>? _dropDown2ModelList;
+  DropDown2Model? _dropDown2Model;
+
+  List<DropDownSubCategoriesModel>? _downSubCategoriesModelList;
+  DropDownSubCategoriesModel? _downSubCategoriesModel;
+
   PostImageOtherFieldModel? _postImageOtherFieldModel;
 
   UploadMultipleFileModel? _uploadMultipleFileModel;
   List<UploadMultipleFileModel>? _uploadMultipleFileModelList;
 
   bool _isLoading = false;
+  bool _isLoadingLast = false;
   bool _isInternetConnected = true;
   List categoryItemList = [];
   var dropDownId;
+  var dropDown2Id;
+  var dropDownSub2Id;
   List<File>? DocumentFilesList;
   int fileLength = 0;
   File? imageFile;
@@ -145,6 +159,21 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
     var width = MediaQuery.of(context).size.width;
 
     return Scaffold(
+      appBar: AppBar(
+        toolbarHeight: height * 0.07,
+        elevation: 0.0,
+        backgroundColor: Color(0xFF256D85),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(
+            Icons.arrow_back_ios,
+            size: 35,
+            color: Colors.white,
+          ),
+        ),
+      ),
       body: _isInternetConnected == false
           ? SafeArea(
               child: Center(
@@ -205,11 +234,12 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
           : _isLoading
               ? const Align(
                   alignment: Alignment.center,
-                  child: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                      Color(0xFF256D85),
+                  child: const Center(
+                    child: CupertinoActivityIndicator(
+                      color: const Color(0xFF256D85),
+                      radius: 20,
                     ),
-                  ),
+                  )
                 )
               : SafeArea(
                   child: SingleChildScrollView(
@@ -303,6 +333,31 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
                                 height: height * 0.07,
                                 width: width * 0.9,
                                 child: _dropDownCategoriesWidget()),
+                            Container(
+                                margin: EdgeInsets.only(
+                                    top: height * 0.07,
+                                    left: width * 0.02,
+                                    right: width * 0.02),
+                                height: height * 0.07,
+                                width: width * 0.9,
+                                child: _dropDownCategoriesWidget2()),
+                            // _isLoadingLast ? const Align(
+                            //     alignment: Alignment.center,
+                            //     child: const Center(
+                            //       child: CupertinoActivityIndicator(
+                            //         color: const Color(0xFF256D85),
+                            //         radius: 20,
+                            //       ),
+                            //     )
+                            // ) :  subCategoriesStatus ? Container(
+                            //     margin: EdgeInsets.only(
+                            //         top: height * 0.07,
+                            //         left: width * 0.02,
+                            //         right: width * 0.02),
+                            //     height: height * 0.07,
+                            //     width: width * 0.9,
+                            //     child: _dropDownCategoriesWidgetSubCategories2()
+                            // ): Container(),
                             Padding(
                               padding: EdgeInsets.only(
                                   top: height * 0.05,
@@ -406,11 +461,9 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
                             Visibility(
                                 visible: docUploader==true,
                                 child: const Center(
-                                  child: CircularProgressIndicator(
-                                    valueColor:
-                                         AlwaysStoppedAnimation<Color>(
-                                      Color(0xFF256D85),
-                                    ),
+                                  child: CupertinoActivityIndicator(
+                                    color: const Color(0xFF256D85),
+                                    radius: 20,
                                   ),
                                 )),
                             Container(
@@ -604,6 +657,108 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
     );
   }
 
+  Widget _dropDownCategoriesWidget2() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      decoration: const ShapeDecoration(
+        shape: RoundedRectangleBorder(
+          side: BorderSide(width: 0.5, style: BorderStyle.solid),
+          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+        ),
+      ),
+      child: DropdownButton<DropDown2Model>(
+        hint: Text(
+          Languages.of(context)!.selectProducts,
+          style: const TextStyle(
+            fontFamily: Constants.fontfamily,
+            fontWeight: FontWeight.w400,
+            fontSize: 16,
+          ),
+        ),
+        items: _dropDown2ModelList!
+            .map((DropDown2Model newItem) {
+          return DropdownMenuItem<DropDown2Model>(
+            value: newItem,
+            child: Text(
+              context.read<UserProvider>().SelectedLanguage == "English" ? newItem.titleEn!: newItem.titleAr!,
+              style: const TextStyle(
+                  fontFamily: Constants.fontfamily,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 16,
+                  color: Colors.black),
+            ),
+          );
+        }).toList(),
+        onChanged: (DropDown2Model? newItem) {
+          setState(() {
+            _dropDown2Model = newItem;
+            dropDown2Id =  newItem!.id;
+
+            // if(subCategoriesStatus==true){
+            //  setState(() {
+            //    subCategoriesStatus==false;
+            //    _downSubCategoriesModelList!.clear();
+            //
+            //  });
+            // }
+            _callDropDownCategoriesAPISubCategories2( newItem.id);
+
+            // print(dropdownvalue!.typeNameCont);
+          });
+        },
+        value: _dropDown2Model,
+        isExpanded: true,
+        underline: Container(color: Colors.transparent),
+      ),
+    );
+  }
+
+  Widget _dropDownCategoriesWidgetSubCategories2() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      decoration: const ShapeDecoration(
+        shape: RoundedRectangleBorder(
+          side: BorderSide(width: 0.5, style: BorderStyle.solid),
+          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+        ),
+      ),
+      child: DropdownButton<DropDownSubCategoriesModel>(
+        hint: Text(
+          Languages.of(context)!.selectSubCategories,
+          style: const TextStyle(
+            fontFamily: Constants.fontfamily,
+            fontWeight: FontWeight.w400,
+            fontSize: 16,
+          ),
+        ),
+        items: _downSubCategoriesModelList!
+            .map((DropDownSubCategoriesModel newItem) {
+          return DropdownMenuItem<DropDownSubCategoriesModel>(
+            value: newItem,
+            child: Text(
+              context.read<UserProvider>().SelectedLanguage == "English" ? newItem.subTitle!: newItem.subTitleAr!,
+              style: const TextStyle(
+                  fontFamily: Constants.fontfamily,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 16,
+                  color: Colors.black),
+            ),
+          );
+        }).toList(),
+        onChanged: (DropDownSubCategoriesModel? newItem) {
+          setState(() {
+            _downSubCategoriesModel = newItem;
+            dropDownSub2Id =  newItem!.categoryId;
+            // print(dropdownvalue!.typeNameCont);
+          });
+        },
+        value: _downSubCategoriesModel,
+        isExpanded: true,
+        underline: Container(color: Colors.transparent),
+      ),
+    );
+  }
+
   Future _callDropDownCategoriesAPI() async {
     setState(() {
       _isLoading = true;
@@ -619,8 +774,52 @@ class _UploadDataScreenState extends State<UploadDataScreen> {
       var jsonData = response.body;
       //var jsonData = response.body;
       _dropDownCategoriesModelList = dropDownCategoriesModelFromJson(jsonData);
+      // setState(() {
+      //   _isLoading = false;
+      // });
+      _callDropDownCategoriesAPI2();
+    }
+  }
+
+  Future _callDropDownCategoriesAPI2() async {
+
+
+    final response = await http.get(
+      Uri.parse(ApiUtils.DROP_DOWN_CATEGORY_2_API),
+    );
+
+    if (response.statusCode == 200) {
+      print('dropDownApiResponse_2 under 200 ${response.body}');
+      var jsonData = response.body;
+      _dropDown2ModelList = dropDown2ModelFromJson(jsonData);
       setState(() {
         _isLoading = false;
+      });
+
+    }
+  }
+
+  Future _callDropDownCategoriesAPISubCategories2(var id) async {
+    setState(() {
+      _isLoadingLast = true;
+    });
+    var map = Map<String, dynamic>();
+    map['id'] = id.toString();
+
+    final response = await http.post(
+      Uri.parse(ApiUtils.DROP_DOWN_SUB_CATEGORY_2_API),
+      body: map
+    );
+
+    if (response.statusCode == 200) {
+      print('dropDownApiResponse_SubCategories_2 under 200 ${response.body}');
+      var jsonData = response.body;
+      _downSubCategoriesModelList = dropDownSubCategoriesModelFromJson(jsonData);
+
+      setState(() {
+        _isLoadingLast = false;
+        subCategoriesStatus=true;
+
       });
     }
   }

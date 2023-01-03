@@ -3,11 +3,12 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:ffi';
 import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
@@ -58,6 +59,15 @@ class _Profile_ScreenState extends State<Profile_Screen> {
 
   }
 
+  @override
+  void dispose() {
+
+
+
+    super.dispose();
+  }
+
+
   Future _checkInternetConnection() async {
     if (this.mounted) {
       setState(() {
@@ -91,14 +101,16 @@ class _Profile_ScreenState extends State<Profile_Screen> {
                 child: _isInternetConnected
                     ? _isLoading
                         ? const Center(
-                            child: CircularProgressIndicator(
-                              color: Color(0xFF256D85),
-                            ),
-                          )
+                  child: CupertinoActivityIndicator(
+                    color: const Color(0xFF256D85),
+                    radius: 20,
+                  ),
+                )
                         : _profileStatusModel!.data!.userType == "3"
                             ? _isAuthorLoading ? const Center(
-                  child: CircularProgressIndicator(
-                    color: Color(0xFF256D85),
+                  child: CupertinoActivityIndicator(
+                    color: const Color(0xFF256D85),
+                    radius: 20,
                   ),
                 )
                     :  Stack(
@@ -115,7 +127,7 @@ class _Profile_ScreenState extends State<Profile_Screen> {
                                       color: Color(0xFF256D85),
                                       // color: Colors.white,
                                       child: Image.asset(
-                                          "assets/quotes_data/bg_author.jpg",fit: BoxFit.cover,),
+                                          "assets/icon_whitout_pg.png",),
                                     ),
                                   ),
                                   Positioned(
@@ -283,7 +295,7 @@ class _Profile_ScreenState extends State<Profile_Screen> {
                                           ),
                                           Column(
                                             children: [
-                                              Text(Languages.of(context)!.published,
+                                               Text(Languages.of(context)!.publishedBooks,
                                                   style: const TextStyle(
                                                     fontFamily: 'Lato',
                                                     color: Colors.black54,
@@ -294,8 +306,8 @@ class _Profile_ScreenState extends State<Profile_Screen> {
                                               SizedBox(
                                                 height: _height * 0.03,
                                               ),
-                                              const Text(
-                                                "1",
+                                              Text(
+                                                  "0",
                                                   style: TextStyle(
                                                     fontFamily: 'Lato',
                                                     color: Color(0xff313131),
@@ -303,7 +315,7 @@ class _Profile_ScreenState extends State<Profile_Screen> {
                                                     fontWeight: FontWeight.w700,
                                                     fontStyle: FontStyle.normal,
                                                   )
-                                              ),
+                                              )
                                             ],
                                           )
                                         ],//hello
@@ -333,16 +345,21 @@ class _Profile_ScreenState extends State<Profile_Screen> {
                                   // ),
                                   Positioned(
                                     top: _height * 0.58,
-                                    left: _width*0.8,
+                                    left: context.read<UserProvider>().SelectedLanguage == "English" ? _width*0.8 : 0.0,
+                                    right: context.read<UserProvider>().SelectedLanguage != "English" ? _width*0.8 : 0.0,
                                     child: Container(
                                       height: _height * 0.3,
                                       width: _width,
                                       child: GestureDetector(
                                         onTap: (){
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) => Uploadscreen()));
+                                          // if (_interstitialAd != null) {
+                                          //   _interstitialAd?.show();
+                                          // } else {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) => Uploadscreen()));
+                                          // }
                                         },
                                         child: Text(
                                             Languages.of(context)!.seeAll,
@@ -401,7 +418,18 @@ class _Profile_ScreenState extends State<Profile_Screen> {
                                                   itemBuilder:
                                                       (context, index1) {
                                                     return GestureDetector(
-                                                      onTap: () {},
+                                                      onTap: () {
+
+                                                        // if (_interstitialAd != null) {
+                                                        //   _interstitialAd?.show();
+                                                        // } else {
+                                                        //   Navigator.push(
+                                                        //       context,
+                                                        //       MaterialPageRoute(
+                                                        //           builder: (context) => Uploadscreen()));
+                                                        // }
+
+                                                      },
                                                       child: Column(
                                                         children: [
                                                           Stack(
@@ -424,6 +452,7 @@ class _Profile_ScreenState extends State<Profile_Screen> {
                                                                   color: Colors
                                                                       .black,
                                                                   image: DecorationImage(
+                                                                    fit: BoxFit.cover,
                                                                       image: _userUploadHistoryModel!.data![index1].bookImage ==
                                                                               ""
                                                                           ? const AssetImage(

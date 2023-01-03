@@ -21,5 +21,11 @@ class ApiUtils {
   static const String UPDATE_PROFILE_STATUS_API = '$BASE/auth/user/statusUpdate';
   static const String SUBSCRIBE_API = '$BASE/user/subscriptions';
   static const String AUTHOR_PROFILE_API = '$BASE/user/history';
+  static const String EDIT_BOOK_API = '$BASE/books/getBookById?bookId=';
+  static const String DELETE_BOOK_API = '$BASE/books/delete';
+  static const String UPDATE_EDIT_BOOK_API = '$BASE/books/update';
+  static const String UPDATE_BOOK_COVER_API = '$BASE/books/update/image';
+  static const String DROP_DOWN_CATEGORY_2_API = '$BASE/product/categories';
+  static const String DROP_DOWN_SUB_CATEGORY_2_API = '$BASE/product/subcategories';
 
 }

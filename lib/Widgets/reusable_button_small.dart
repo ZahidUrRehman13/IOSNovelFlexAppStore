@@ -19,12 +19,12 @@ class ResuableMaterialButtonSmall extends StatelessWidget {
     var width= MediaQuery.of(context).size.width;
     return MaterialButton(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(25),
 
       ),
-      color: Color(0xFFFC9117),
+      color: Color(0xff3a6c83),
       minWidth: width*0.9,
-      height: height*0.07,
+      height: height*0.06,
       onPressed: onpress,
       child:  Text(buttonname,style: TextStyle(color: Colors.white,fontSize:width*0.04,fontFamily: Constants.fontfamily, ),)
     );

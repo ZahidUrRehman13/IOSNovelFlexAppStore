@@ -1,42 +1,18 @@
 name: novelflex
 description: A new Flutter project.
 
-# The following line prevents the package from being accidentally published to
-# pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-
-# The following defines the version and build number for your application.
-# A version number is three numbers separated by dots, like 1.2.43
-# followed by an optional build number separated by a +.
-# Both the version and the builder number may be overridden in flutter
-# build by specifying --build-name and --build-number, respectively.
-# In Android, build-name is used as versionName while build-number used as versionCode.
-# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
-# In iOS, build-name is used as CFBundleShortVersionString while build-number is used as CFBundleVersion.
-# Read more about iOS versioning at
-# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-# In Windows, build-name is used as the major, minor, and patch parts
-# of the product and file versions while build-number is used as the build suffix.
-version: 1.0.5+5
+version: 1.0.2+3
 #android next version == 1.0.6+6
 #ios next version == 1.0.0+1
 
 environment:
   sdk: '>=2.18.5 <3.0.0'
 
-# Dependencies specify other packages that your package needs in order to work.
-# To automatically upgrade your package dependencies to the latest versions
-# consider running `flutter pub upgrade --major-versions`. Alternatively,
-# dependencies can be manually updated by changing the version numbers below to
-# the latest version available on pub.dev. To see which dependencies have newer
-# versions available, run `flutter pub outdated`.
 dependencies:
   flutter:
     sdk: flutter
 
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   shared_preferences: ^2.0.15
   flutter_phoenix: ^1.1.0
@@ -66,7 +42,11 @@ dependencies:
   new_version_plus: ^0.0.1+4
   in_app_update: ^4.0.1
   app_version_update: ^2.0.3
-
+  flutter_svg: ^1.1.6
+  custom_signin_buttons: ^1.0.0
+  advance_pdf_viewer2: ^2.0.4
+  syncfusion_flutter_pdfviewer: ^20.4.38
+  google_mobile_ads: ^1.2.0
 
 dev_dependencies:
   change_app_package_name: ^1.1.0
@@ -103,6 +83,7 @@ flutter:
   assets:
     - assets/
     - assets/quotes_data/
+    - assets/quotes_data/extra_pngs/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

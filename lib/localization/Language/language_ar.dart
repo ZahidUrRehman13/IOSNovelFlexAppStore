@@ -5,7 +5,21 @@ class LanguageAr extends Languages {
   String get appName => "متعدد اللغات";
 
   @override
-  String get labelWelcome => "أهلا وسهلا";
+  String get labelWelcome => "مرحبًا بكم في رواية\n جنة من الكتب!";
+
+  @override
+  String get continueWith =>  "أو تواصل مع";
+
+  @override
+  String get selectAccountType => "حدد نوع الحساب";
+
+  @override
+  String get newPasswordCreate => "أنشئ كلمة مرور جديدة";
+
+  @override
+  String get resetPasswordtxt => "دعنا نعيد تعيين كلمة المرور الخاصة بك";
+  @override
+  String get resetPasswordtxt2 => "أدخل البريد الإلكتروني المرتبط بحسابك وسنرسل بريدًا إلكترونيًا يحتوي على إرشادات لإعادة تعيين كلمة المرور الخاصة بك.";
 
   @override
   String get follow => "الإشتراك";
@@ -48,7 +62,31 @@ class LanguageAr extends Languages {
 
   @override
   // TODO: implement EditButton
-  String get EditButton => "أضف ملف PDF";
+  String get EditButton => "تحرير الكتاب";
+
+  @override
+  // TODO: implement EditButton
+  String get myWallet => "محفظتى";
+
+  @override
+  // TODO: implement EditButton
+  String get selectSubCategories => "حدد الفئات الفرعية";
+
+  @override
+  // TODO: implement EditButton
+  String get publishedBooks => "نشرت";
+
+  @override
+  // TODO: implement EditButton
+  String get Update => "تحديث";
+
+  @override
+  // TODO: implement EditButton
+  String get selectProducts => "حدد المنتجات";
+
+  @override
+  // TODO: implement EditButton
+  String get addPDF => "أضف ملف";
 
   @override
   // TODO: implement MyMangaUploads
@@ -88,7 +126,7 @@ class LanguageAr extends Languages {
   // TODO: implement MyMangaUploads
   String get terms => "البنود و الظروف";
   @override
-  String get published => "الكتب المنشورة";
+  String get published => "محفظتى";
 
   @override
   String get authorC => "نشر الكتب";
@@ -196,7 +234,15 @@ class LanguageAr extends Languages {
 
   @override
   // TODO: implement register
-  String get register => "يسجل";
+  String get register => "استمر";
+
+  @override
+  // TODO: implement password
+  String get iamreader => "أنا قارئ";
+
+  @override
+  // TODO: implement register
+  String get iamWriter => "أنا الكاتب";
 
   @override
   // TODO: implement signup

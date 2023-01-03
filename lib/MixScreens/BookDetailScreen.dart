@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:connectivity/connectivity.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:http/http.dart' as http;
 import 'package:novelflex/MixScreens/pdfViewerScreen.dart';
 import 'package:provider/provider.dart';
@@ -29,15 +31,25 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
   AddReviewModel? _addReviewModel;
   BookDetailsModel? _bookDetailsModel;
   var token;
+  bool subscribe = false;
 
   @override
   void initState() {
     super.initState();
-    print("book_id= ${widget.BookID}");
-    print("tokenn: ${context.read<UserProvider>().UserToken.toString()}");
     token = context.read<UserProvider>().UserToken.toString();
     _checkInternetConnection();
+
   }
+
+  @override
+  void dispose() {
+
+
+    super.dispose();
+  }
+
+
+
 
   Future _checkInternetConnection() async {
     if (this.mounted) {
@@ -75,7 +87,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
               Navigator.pop(context);
             },
             icon: const Icon(
-              Icons.arrow_back,
+              Icons.arrow_back_ios,
               size: 35,
               color: Colors.white,
             ),
@@ -110,7 +122,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                   showDialog(
                     context: context,
                     barrierDismissible:
-                        true, // set to false if you want to force a rating
+                    true, // set to false if you want to force a rating
                     builder: (context) => Dialogue(context),
                   );
                 },
@@ -125,80 +137,85 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
         backgroundColor: Colors.white,
         body: _isInternetConnected == false
             ? Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      "INTERNET NOT CONNECTED",
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                "INTERNET NOT CONNECTED",
+                style: TextStyle(
+                  fontFamily: Constants.fontfamily,
+                  color: Color(0xFF256D85),
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+              SizedBox(
+                height: _height * 0.019,
+              ),
+              InkWell(
+                child: Container(
+                  width: _width * 0.40,
+                  height: _height * 0.058,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF256D85),
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(
+                        40.0,
+                      ),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset:
+                        Offset(0, 3), // changes position of shadow
+                      ),
+                    ],
+                  ),
+                  child: const Center(
+                    child: Text(
+                      "No Internet Connected",
                       style: TextStyle(
                         fontFamily: Constants.fontfamily,
-                        color: Color(0xFF256D85),
                         fontWeight: FontWeight.w400,
+                        color: Colors.white,
                       ),
                     ),
-                    SizedBox(
-                      height: _height * 0.019,
-                    ),
-                    InkWell(
-                      child: Container(
-                        width: _width * 0.40,
-                        height: _height * 0.058,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF256D85),
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(
-                              40.0,
-                            ),
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 5,
-                              blurRadius: 7,
-                              offset:
-                                  Offset(0, 3), // changes position of shadow
-                            ),
-                          ],
-                        ),
-                        child: const Center(
-                          child: Text(
-                            "No Internet Connected",
-                            style: TextStyle(
-                              fontFamily: Constants.fontfamily,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                      onTap: () {
-                        _checkInternetConnection();
-                      },
-                    ),
-                  ],
+                  ),
                 ),
-              )
+                onTap: () {
+                  _checkInternetConnection();
+                },
+              ),
+            ],
+          ),
+        )
             : _isLoading
-                ? const Align(
-                    alignment: Alignment.center,
-                    child: CircularProgressIndicator(
-                      valueColor:
-                           AlwaysStoppedAnimation<Color>(Color(0xFF256D85)),
-                    ),
-                  )
-                : Container(
+            ? const Align(
+          alignment: Alignment.center,
+          child: const Center(
+            child: CupertinoActivityIndicator(
+              color: const Color(0xFF256D85),
+              radius: 20,
+            ),
+          )
+        )
+            : Container(
+          height: _height*0.9,
           decoration: BoxDecoration(
-            color: const Color(0xFF256D85),
+            color:  Colors.white,
             image: DecorationImage(
-                image: NetworkImage(
-                  _bookDetailsModel!.data!.bookImage!,
+              alignment: Alignment.topCenter,
+              image: NetworkImage(
+                _bookDetailsModel!.data!.bookImage!,
 
-                ),
-                fit: BoxFit.cover,
+              ),
+              // fit: BoxFit.cover,
             ),
           ),
-             child: ListView(
-             children: [
+          child: ListView(
+            physics: ClampingScrollPhysics(),
+            children: [
               Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -228,13 +245,16 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                                         )));
                           },
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               Padding(
                                 padding:  EdgeInsets.only(left: _width*0.13,right: 12,),
                                 child: GestureDetector(
                                   onTap: (){
                                     _callSubscribeAPI();
+                                    setState(() {
+                                      subscribe=true;
+                                    });
                                   },
                                   child: Container(
                                     width: _width*0.25,
@@ -244,12 +264,12 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                                       color: const Color(0xFF256D85),
                                     ),
                                     child: Center(
-                                      child: Text(
-                                        Languages.of(context)!
-                                            .follow,
+                                      child: subscribe ? Icon(Icons.notification_add_outlined,color: Colors.white,): Text(
+                                          Languages.of(context)!
+                                              .follow,
                                           style: const TextStyle(
                                             fontFamily: 'Lato',
-                                            fontSize: 20,
+                                            fontSize: 13,
                                             color: Colors.white,
                                             fontWeight: FontWeight.w700,
                                             fontStyle: FontStyle.normal,
@@ -309,16 +329,17 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                                       border: Border.all(width: 4,color: Color(0xFF256D85),),
                                       color: Colors.white,
                                       image: DecorationImage(
-                                          image: _bookDetailsModel!
-                                              .data!.author!.img ==
-                                              null
-                                              ? const AssetImage(
-                                              "assets/quotes_data/profile_image.png")
-                                              : NetworkImage(
-                                            _bookDetailsModel!
-                                                .data!.author!.img!
-                                                .toString(),
-                                          ) as ImageProvider,
+                                        fit: BoxFit.cover,
+                                        image: _bookDetailsModel!
+                                            .data!.author!.img ==
+                                            null
+                                            ? const AssetImage(
+                                            "assets/quotes_data/profile_image.png")
+                                            : NetworkImage(
+                                          _bookDetailsModel!
+                                              .data!.author!.img!
+                                              .toString(),
+                                        ) as ImageProvider,
                                       )
                                   ),
                                 ),
@@ -383,7 +404,17 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                               // overflow: TextOverflow.ellipsis,
                             ),
                           ),
-                        )
+                        ),
+                        //  _bannerAd != null
+                        //     ? Align(
+                        //   alignment: Alignment.topCenter,
+                        //   child: Container(
+                        //     width: _bannerAd!.size.width.toDouble(),
+                        //     height: _bannerAd!.size.height.toDouble(),
+                        //     child: AdWidget(ad: _bannerAd!),
+                        //   ),
+                        // )
+                        //     : Container(),
                       ],
                     ),
                   ),
@@ -400,15 +431,17 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                         itemBuilder: (BuildContext context, index) {
                           return GestureDetector(
                             onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => PdfScreen(
-                                        url: _bookDetailsModel!
-                                            .data!.chapters![index].url,
-                                        name: _bookDetailsModel!
-                                            .data!.bookTitle,
-                                      )));
+
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => PdfScreen(
+                                          url: _bookDetailsModel!
+                                              .data!.chapters![index].url,
+                                          name: _bookDetailsModel!
+                                              .data!.bookTitle,
+                                        )));
+
                               // PdfScreen()));
                             },
                             child: Container(
@@ -636,3 +669,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
     }
   }
 }
+
+
+
+

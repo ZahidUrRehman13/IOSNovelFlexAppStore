@@ -5,29 +5,30 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
+import 'package:novelflex/UserAuthScreen/SignUpScreens/signUpScreen_Third.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../Models/UserModel.dart';
-import '../Provider/UserProvider.dart';
-import '../Utils/ApiUtils.dart';
-import '../Utils/Constants.dart';
-import '../Utils/toast.dart';
-import '../Widgets/reusable_button_small.dart';
-import '../localization/Language/languages.dart';
-import '../tab_screen.dart';
-import 'login_screen.dart';
+import '../../Models/UserModel.dart';
+import '../../Provider/UserProvider.dart';
+import '../../Utils/ApiUtils.dart';
+import '../../Utils/Constants.dart';
+import '../../Utils/toast.dart';
+import '../../Widgets/reusable_button_small.dart';
+import '../../localization/Language/languages.dart';
+import '../../tab_screen.dart';
+import '../login_screen.dart';
 
-class SignUpScreen extends StatefulWidget {
+class SignUpScreen_Second extends StatefulWidget {
   static const String id = 'signUp_screen';
 
-  const SignUpScreen({Key? key}) : super(key: key);
+  const SignUpScreen_Second({Key? key}) : super(key: key);
 
   @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
+  State<SignUpScreen_Second> createState() => _SignUpScreen_SecondState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
+class _SignUpScreen_SecondState extends State<SignUpScreen_Second> {
 
   var _fullnameFocusNode = new FocusNode();
   var _emailFocusNode = new FocusNode();
@@ -70,8 +71,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   void dispose() {
-    // _controllerFirstName!.dispose();
-    // _controllerLastName!.dispose();
     _controllerFullName!.dispose();
     _controllerEmail!.dispose();
     _controllerPhoneNumber!.dispose();
@@ -85,21 +84,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     var _height = MediaQuery.of(context).size.height;
     var _width = MediaQuery.of(context).size.width;
     return Scaffold(
-        backgroundColor: Colors.white,
-        // appBar: AppBar(
-        //   toolbarHeight: _height * 0.1,
-        //   title: Text(
-        //     Languages.of(context)!.signup,
-        //     style: TextStyle(
-        //       color: const Color(0xFF256D85),
-        //       fontWeight: FontWeight.w600,
-        //       fontSize: _width * 0.05,
-        //     ),
-        //   ),
-        //   centerTitle: true,
-        //   backgroundColor: Colors.white,
-        //   elevation: 0.0,
-        // ),
+        backgroundColor: const Color(0xffebf5f9),
         body: GestureDetector(
           onTap: () {
             FocusScopeNode currentFocus = FocusScope.of(context);
@@ -108,30 +93,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
               currentFocus.focusedChild!.unfocus();
             }
           },
-          child: SingleChildScrollView(
-            child: Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  colorFilter: ColorFilter.mode(
-                      Colors.black.withOpacity(0.8), BlendMode.dstATop),
-                  opacity: 100.0,
-                  image: const AssetImage("assets/manga_books.jpg"),
-                ),
-              ),
+          child: SafeArea(
+            child: SingleChildScrollView(
               child: Form(
                 key: _formKey,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
+                    mainText2(_width),
                     SizedBox(
-                      height: _height*0.15,
+                      height: _height*0.2,
+                      width: _width*0.4,
+                      child: Image.asset('assets/quotes_data/NoPath.png'),
                     ),
                     mainText(_width),
-                    SizedBox(
-                      height: _height*0.05,
-                    ),
                     Padding(
                       padding: EdgeInsets.only(
                           top: _height * 0.04,
@@ -419,9 +395,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: _height * 0.03,
-                    ),
                     Visibility(
                       visible: _isLoading == true,
                       child: const Center(
@@ -432,9 +405,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     Container(
                       width: _width * 0.9,
-                      height: _height * 0.07,
+                      height: _height * 0.06,
                       margin: EdgeInsets.only(
-                        top: _height*0.01
+                        top: _height*0.05
                       ),
                       child: ResuableMaterialButtonSmall(
                         onpress: () {
@@ -442,6 +415,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           //   _isLoading=true;
                           // });
                           handleRegisterUser();
+                          // Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                          // SingUpScreen_Third()));
                         },
                         buttonname: Languages.of(context)!.register,
                       ),
@@ -460,16 +435,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                         child: Text(
                             Languages.of(context)!.alreadyhaveAccountSignIn,
-                          style: TextStyle(
-                              color: Colors.white, fontSize:  _width * 0.04, fontFamily: Constants.fontfamily,),
-                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                              color:  const Color(0xff3a6c83),
+                              fontWeight: FontWeight.w400,
+                              fontFamily: "Lato",
+                              fontStyle:  FontStyle.normal,
+                              fontSize: 14.0
+                          ), textAlign: TextAlign.center,
 
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: _height*0.16,
-                    ),
+
                   ],
                 ),
               ),
@@ -484,10 +461,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
       children: [
         Text(
           Languages.of(context)!.createAccount,
-          style: TextStyle(
-              color: Colors.white,
-              fontSize: width * 0.06,
-              fontWeight: FontWeight.w800, fontFamily: Constants.fontfamily,),
+          style: const TextStyle(
+              color:  const Color(0xff002333),
+              fontWeight: FontWeight.w700,
+              fontFamily: "Lato",
+              fontStyle:  FontStyle.normal,
+              fontSize: 20.0
+          ),
           textAlign: TextAlign.center,
         ),
       ],
@@ -767,10 +747,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
     UserProvider userProvider =
     Provider.of<UserProvider>(context, listen: false);
 
-    userProvider.setUserEmail(_userModel!.data.email);
-    userProvider.setUserToken(_userModel.data.accessToken);
-    userProvider.setUserName(_userModel.data.fname);
-    userProvider.setUserID(_userModel.data.id.toString());
+    userProvider.setUserEmail(_userModel!.data!.email!);
+    userProvider.setUserToken(_userModel.data!.accessToken!);
+    userProvider.setUserName(_userModel.data!.fname!);
+    // userProvider.setUserImage(_userModel.data.img);
+    userProvider.setUserID(_userModel.data!.id!.toString());
     // userProvider.setUserImage(_userModel.data.img);
     userProvider.setLanguage("English");
   }
@@ -780,6 +761,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
         this.context,
         MaterialPageRoute(builder: (context) => TabScreen()),
         ModalRoute.withName("tab_screen"));
+  }
+  Widget mainText2(var width) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          Languages.of(context)!.signup,
+          style: const TextStyle(
+              color:  const Color(0xff002333),
+              fontWeight: FontWeight.w700,
+              fontFamily: "Lato",
+              fontStyle:  FontStyle.normal,
+              fontSize: 14.0
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ],
+    );
   }
 }
 
